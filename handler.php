@@ -45,13 +45,31 @@ class handler extends db {
         for($j = 0; $j < count($inputs); $j++){
             switch($datatypes[$j + 1][0]){
                 case "date":
-                    $cell_data = "'".date('Y-m-d', strtotime($inputs[$j]))."'";
+                    if(date('Y-m-d', strtotime($inputs[$j])) != "0000-00-00"){
+                        $cell_data = "'".date('Y-m-d', strtotime($inputs[$j]))."'";
+                    }
+                    else{
+                        header("Location: /".$uri.".php");
+                        return;
+                    }
                     break;
                 case "int":
-                    $cell_data = $inputs[$j];
+                    if(ctype_digit($inputs[$j])){
+                        $cell_data = $inputs[$j];
+                    }
+                    else{
+                        header("Location: /".$uri.".php");
+                        return;
+                    }
                     break;
                 case "varchar":
-                    $cell_data = "'". $inputs[$j] ."'";
+                    if(ctype_digit($inputs[$j])){
+                        $cell_data = "'". $inputs[$j] ."'";
+                    }
+                    else{
+                        header("Location: /".$uri.".php");
+                        return;
+                    }
                     break;
             }
             $conn->query("UPDATE ".$uri." SET ".$uri.".".$col_names[$j + 1][0]." = ".$cell_data." WHERE ".$uri.".id = ".$id."");
@@ -78,13 +96,31 @@ class handler extends db {
         for($j = 0; $j < count($inputs); $j++){
             switch($datatypes[$j + 1][0]){
                 case "date":
-                    $cell_data = "'".date('Y-m-d', strtotime($inputs[$j]))."'";
+                    if(date('Y-m-d', strtotime($inputs[$j])) != "0000-00-00"){
+                        $cell_data = "'".date('Y-m-d', strtotime($inputs[$j]))."'";
+                    }
+                    else{
+                        header("Location: /".$uri.".php");
+                        return;
+                    }
                     break;
                 case "int":
-                    $cell_data = $inputs[$j];
+                    if(ctype_digit($inputs[$j])){
+                        $cell_data = $inputs[$j];
+                    }
+                    else{
+                        header("Location: /".$uri.".php");
+                        return;
+                    }
                     break;
                 case "varchar":
-                    $cell_data = "'". $inputs[$j] ."'";
+                    if(ctype_digit($inputs[$j])){
+                        $cell_data = "'". $inputs[$j] ."'";
+                    }
+                    else{
+                        header("Location: /".$uri.".php");
+                        return;
+                    }
                     break;
             }
             $query1 .= $col_names[$j + 1][0];
@@ -106,5 +142,4 @@ class handler extends db {
         $conn->close();
         header("Location: /".$uri.".php");
     }
-    
 }
