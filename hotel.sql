@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 16, 2025 at 05:11 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Gép: 127.0.0.1
+-- Létrehozás ideje: 2025. Máj 21. 11:31
+-- Kiszolgáló verziója: 10.4.32-MariaDB
+-- PHP verzió: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,11 +20,10 @@ SET time_zone = "+00:00";
 CREATE DATABASE hotel
 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 USE hotel;
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `guests`
+-- Tábla szerkezet ehhez a táblához `guests`
 --
 
 CREATE TABLE `guests` (
@@ -36,7 +35,7 @@ CREATE TABLE `guests` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reservation`
+-- Tábla szerkezet ehhez a táblához `reservation`
 --
 
 CREATE TABLE `reservation` (
@@ -50,7 +49,7 @@ CREATE TABLE `reservation` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rooms`
+-- Tábla szerkezet ehhez a táblához `rooms`
 --
 
 CREATE TABLE `rooms` (
@@ -63,48 +62,61 @@ CREATE TABLE `rooms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- Indexes for dumped tables
+-- Indexek a kiírt táblákhoz
 --
 
 --
--- Indexes for table `guests`
+-- A tábla indexei `guests`
 --
 ALTER TABLE `guests`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `reservation`
+-- A tábla indexei `reservation`
 --
 ALTER TABLE `reservation`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_rooms` (`room_id`),
+  ADD KEY `fk_guests` (`guest_id`);
 
 --
--- Indexes for table `rooms`
+-- A tábla indexei `rooms`
 --
 ALTER TABLE `rooms`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- A kiírt táblák AUTO_INCREMENT értéke
 --
 
 --
--- AUTO_INCREMENT for table `guests`
+-- AUTO_INCREMENT a táblához `guests`
 --
 ALTER TABLE `guests`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `reservation`
+-- AUTO_INCREMENT a táblához `reservation`
 --
 ALTER TABLE `reservation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `rooms`
+-- AUTO_INCREMENT a táblához `rooms`
 --
 ALTER TABLE `rooms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Megkötések a kiírt táblákhoz
+--
+
+--
+-- Megkötések a táblához `reservation`
+--
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `fk_guests` FOREIGN KEY (`guest_id`) REFERENCES `guests` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_rooms` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
