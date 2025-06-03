@@ -44,7 +44,8 @@ class ReservationModel extends Model
 
     public function getRooms($id = ""){
         $room = new RoomModel();
-        $rooms = $room->all();
+        $order = ['order_by' => ['room_number'], 'direction' => ['ASC']];
+        $rooms = $room->all($order);
         $options = "";
         for ($i = 0; $i < count($rooms); $i++){
             $currRoom = $room->findElementsIDByProperty("room_number", $rooms[$i]->room_number);
@@ -59,7 +60,8 @@ class ReservationModel extends Model
 
     public function getGuests($id = ""){
         $guest = new GuestModel();
-        $guests = $guest->all();
+        $order = ['order_by' => ['name'], 'direction' => ['ASC']];
+        $guests = $guest->all($order);
         $options = "";
         for ($i = 0; $i < count($guests); $i++) {
             $options .= '<option value="' . $guest->findElementsIDByProperty("name", $guests[$i]->name)['id'] . '"';

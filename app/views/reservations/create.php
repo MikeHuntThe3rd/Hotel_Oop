@@ -15,7 +15,7 @@ echo <<<HTML
                     {$reservation->getGuests()}
                 </select><br>
                 <label for="reservations">Napok</label>
-                <input type="text" name="days" id="days">
+                <input type="text" name="days" id="days"><br>
                 <label for="reservations">Dátum</label>
                 <input type="date" name="date" id="date"><br>
                 <hr>

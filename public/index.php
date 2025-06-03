@@ -13,5 +13,5 @@ $router->handle();
 $install = new Install(["host" => "localhost", "user" => "root", "password" => "", "database" => "mysql"]);
 if (!$install->dbExists()){
     $install->create_db();
-    $install->fillTables();
+    $install->fill_tables();
 }
