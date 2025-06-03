@@ -3,11 +3,11 @@ echo <<<HTML
         <form method='post' action='/rooms'>
             <fieldset>
                 <label for="rooms">Emelet</label>
-                <input type="text" name="floor" id="floor">
+                <input type="text" name="floor" id="floor"><br>
                 <label for="rooms">Szobaszám</label>
                 <input type="text" name="room_number" id="room_number"><br>
                 <label for="rooms">Férőhelyek</label>
-                <input type="text" name="accommodation" id="accommodation">
+                <input type="text" name="accommodation" id="accommodation"><br>
                 <label for="rooms">Ár</label>
                 <input type="text" name="price" id="price"><br>
                 <label for="rooms">Megjegyzés</label>

@@ -106,76 +106,36 @@ class Install extends Database
         $conn->close();
     }
 
-    function fillTables($dbName = self::DEFAULT_CONFIG['database']){
-        if ($this::SETUP['floorCount'] * $this::SETUP['roomCount'] < $this::SETUP['numberOfRecords']) {
-            $length = $this::SETUP['floorCount'] * $this::SETUP['roomCount'];
-        } else {
-            $length = $this::SETUP['numberOfRecords'];
-        }
-        $this->fillTableGuests($dbName, $length);
-        $this->fillTableRooms($dbName, $length);
-        $this->fillTableReservations($dbName, $length);
+    public function fill_tables($db_name = self::DEFAULT_CONFIG['database']): void
+    {
+        $max_rooms = self::SETUP['floorCount'] * self::SETUP['roomCount'];
+        $record_count = min(self::SETUP['numberOfRecords'], $max_rooms);
+
+        $this->fill_guests_table($db_name, $record_count);
+        $this->fill_rooms_table($db_name, $record_count);
+        $this->fill_reservations_table($db_name, $record_count);
     }
 
-    function fillTableGuests($dbName, $length): bool{
-        try {
-
-            $sql = "INSERT INTO `$dbName`.guests(name, age) VALUES";
-            for ($i = 0; $i < $length; $i++){
-                $name = $this::SETUP['lastNames'][rand(0,count($this::SETUP['lastNames'])-1)] . " " . $this::SETUP['firstNames'][rand(0,count($this::SETUP['firstNames'])-1)];
-                $age = rand(18, 100);
-                $sql .= "('$name',$age)";
-                if ($i != $length-1){
-                    $sql .= ",";
-                }
-            }
-            $sql .= ";";
-            
-            $conn = $this->getConn('hotel');
-            $conn->query($sql);
-            $conn->close();
-            return true;
-        } catch (Exception $e) {
-            Display::message($e->getMessage(), 'error');
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    function fillTableRooms($dbName, $length): bool
+    private function fill_guests_table(string $db_name, int $count): bool
     {
         try {
-            $sql = "INSERT INTO `$dbName`.rooms(floor, room_number, accommodation, price, comment) VALUES";
-            $rooms = array_map(fn($j) => [$j => array_map(fn($i) => (string) $i, range(1, $this::SETUP['roomCount']))], range(0, $this::SETUP['floorCount']-1));
+            $sql = "INSERT INTO `$db_name`.guests(name, age) VALUES ";
+            $values = [];
 
-            for ($k = 0; $k < $length; $k++){
-                if (count($rooms) > 0){
-                    $floorIndex = rand(0, count($rooms)-1);
-                    $floor = array_keys($rooms[$floorIndex])[0];
-                    if (count($rooms[$floorIndex][$floor]) > 0){
-                        $roomIndex = rand(0, count($rooms[$floorIndex][$floor])-1);
-                        $room = $rooms[$floorIndex][$floor][$roomIndex];
-                        array_splice($rooms[$floorIndex][$floor], $roomIndex, 1);
-                    }
-                    if (count($rooms[$floorIndex][$floor]) == 0){
-                        array_splice($rooms, $floorIndex, 1);
-                    }
-    
-                    $accommodation = $this::SETUP['accommodation'][rand(0, count($this::SETUP['accommodation'])-1)];
-                    $price = round(rand($this::SETUP['priceRange'][0], $this::SETUP['priceRange'][1]),-2);
-                    $sql .= "(" . $floor . "," . $room+$floor*$this::SETUP['roomCount'] . "," . $accommodation . "," . $price . ",'" . $this::SETUP['comments'][rand(0, 9)] . "')";
-                    if ($k != $length-1){
-                        $sql .= ',';
-                    }
-                }
+            for ($i = 0; $i < $count; $i++) {
+                $last = self::SETUP['lastNames'][array_rand(self::SETUP['lastNames'])];
+                $first = self::SETUP['firstNames'][array_rand(self::SETUP['firstNames'])];
+                $age = rand(18, 100);
+                $values[] = sprintf("('%s %s', %d)", $last, $first, $age);
             }
-            $sql .= ';';
-            
+
+            $sql .= implode(',', $values) . ';';
+
             $conn = $this->getConn('hotel');
             $conn->query($sql);
             $conn->close();
-            return true;
 
+            return true;
         } catch (Exception $e) {
             Display::message($e->getMessage(), 'error');
             error_log($e->getMessage());
@@ -183,32 +143,76 @@ class Install extends Database
         }
     }
 
-    function fillTableReservations($dbName, $length){
-        try{
-            $sql = "INSERT INTO `$dbName`.reservations(room_id, guest_id, days, date) VALUES";
+    private function fill_rooms_table(string $db_name, int $count): bool
+    {
+        try {
+            $sql = "INSERT INTO `$db_name`.rooms(floor, room_number, accommodation, price, comment) VALUES ";
+            $values = [];
 
-            $room = new RoomModel();
-            $rooms = $room->all(['order_by' => ['RAND()'], 'direction' => ['ASC']]);
-            $guest = new GuestModel();
-            $guests = $guest->all(['order_by' => ['RAND()'], 'direction' => ['ASC']]);
-
-            for ($i = 0; $i < count($rooms); $i++){
-                $roomID = $rooms[$i]->id;
-                $guestID = $guests[$i]->id;
-                $days = rand(1, $this::SETUP['days']);
-                $date = date("Y-m-d", rand(strtotime("Jan 01 2015"), strtotime("Nov 01 2016")));
-                $sql .= "($roomID,'$guestID',$days,'$date')";
-                if ($i != count($rooms)-1){
-                    $sql .= ',';
+            $available_rooms = [];
+            for ($floor = 0; $floor < self::SETUP['floorCount']; $floor++) {
+                for ($room = 1; $room <= self::SETUP['roomCount']; $room++) {
+                    $available_rooms[] = [$floor, $room];
                 }
             }
-            $sql .= ';';
+
+            shuffle($available_rooms);
+            $available_rooms = array_slice($available_rooms, 0, $count);
+
+            foreach ($available_rooms as [$floor, $room_number]) {
+                $room_id = $room_number + $floor * self::SETUP['roomCount'];
+                $accommodation = self::SETUP['accommodation'][array_rand(self::SETUP['accommodation'])];
+                $price = round(rand(self::SETUP['priceRange'][0], self::SETUP['priceRange'][1]), -2);
+                $comment = self::SETUP['comments'][array_rand(self::SETUP['comments'])];
+
+                $values[] = "($floor, $room_id, $accommodation, $price, '$comment')";
+            }
+
+            $sql .= implode(',', $values) . ';';
+
             $conn = $this->getConn('hotel');
             $conn->query($sql);
             $conn->close();
+
             return true;
+        } catch (Exception $e) {
+            Display::message($e->getMessage(), 'error');
+            error_log($e->getMessage());
+            return false;
         }
-        catch (Exception $e){
+    }
+
+    private function fill_reservations_table(string $db_name, int $count): bool
+    {
+        try {
+            $sql = "INSERT INTO `$db_name`.reservations(room_id, guest_id, days, date) VALUES ";
+            $values = [];
+
+            $room_model = new RoomModel();
+            $guest_model = new GuestModel();
+
+            $rooms = $room_model->all(['order_by' => ['RAND()'], 'direction' => ['ASC']]);
+            $guests = $guest_model->all(['order_by' => ['RAND()'], 'direction' => ['ASC']]);
+
+            $pairs = min(count($rooms), count($guests), $count);
+
+            for ($i = 0; $i < $pairs; $i++) {
+                $room_id = $rooms[$i]->id;
+                $guest_id = $guests[$i]->id;
+                $days = rand(1, self::SETUP['days']);
+                $date = date("Y-m-d", rand(strtotime("2015-01-01"), strtotime("2016-11-01")));
+
+                $values[] = "($room_id, '$guest_id', $days, '$date')";
+            }
+
+            $sql .= implode(',', $values) . ';';
+
+            $conn = $this->getConn('hotel');
+            $conn->query($sql);
+            $conn->close();
+
+            return true;
+        } catch (Exception $e) {
             Display::message($e->getMessage(), 'error');
             error_log($e->getMessage());
             return false;
