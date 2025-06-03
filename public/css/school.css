@@ -1,0 +1,230 @@
+button {
+    font-size: 1rem;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 8px;
+    margin-top: 20px;
+    background: #d6d6d6;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+button:hover {
+    background: #c2c2c2;
+    transform: translateY(-10px);
+}/* Remove underline from all <a> elements */
+a {
+    text-decoration: none;
+}
+
+td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+td > * {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.navbar {
+    /* Keep the navbar's horizontal layout */
+    padding: 20px;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center buttons horizontally */
+}
+
+.nav-button {
+    margin-bottom: 10px;
+}
+
+.nav-button a {
+    text-decoration: none;
+}
+
+.nav-button button {
+    display: inline-block;
+}
+.align-right {
+    text-align: right;
+}
+
+/* Banner styles */
+#banner {
+    text-align: center;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+#banner h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#banner h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+/* Side menu styles */
+#side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    background-color: #f8f8f8;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+}
+
+#side-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#side-menu ul li {
+    margin-bottom: 10px;
+}
+
+#side-menu ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+#side-menu ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Main content styles */
+main {
+    margin-left: 220px; /* Adjust this value based on the width of the side menu */
+    padding: 20px;
+}
+
+/* Years buttons aligned in a row */
+#years-section {
+    display: flex; /* Align buttons in a row */
+    gap: 10px; /* Add space between buttons */
+    margin-bottom: 15px; /* Add spacing below the years section */
+}
+
+#years-section button {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#years-section button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Classes buttons aligned in a row */
+#classes-section {
+    display: flex; /* Align buttons in a row */
+    flex-wrap: wrap; /* Allow wrapping to the next row if needed */
+    gap: 10px; /* Add space between buttons */
+}
+
+#classes-section button {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#classes-section button:hover {
+    background-color: #dcdcdc;
+}
+
+/* Active button style */
+#years-section button.active {
+    background-color: #b0c4de;
+    border-color: #a0b4ce;
+}
+
+/* Active button style for classes-section */
+#classes-section button.active {
+    background-color: #b0c4de;
+    border-color: #a0b4ce;
+}
+
+/*!* Style for odd rows *!*/
+/*#students-section table tbody tr:nth-child(odd) {*/
+/*    background-color: #f2f2f2;*/
+/*}*/
+
+/*!* Style for even rows *!*/
+/*#students-section table tbody tr:nth-child(even) {*/
+/*    background-color: #ffffff;*/
+/*}*/
+
+/* Style for the table header */
+#students-section table thead,
+#students-section table tfoot {
+    background-color: #d3d3d3 !important;
+    color: #000 !important;
+    font-weight: bold;
+}
+
+.student-content table {
+    width: 100%;
+}
+
+.trash {
+    color: red;
+}
+
+.plus {
+    color: green;
+}
+
+.flex {
+    display: flex;
+    gap: 5px;
+}
+
+/* Apply styles to the main table */
+#students-section > table > tbody > tr:nth-child(odd) {
+    background-color: #f2f2f2; /* Light gray for odd rows */
+}
+
+#students-section > table > tbody > tr:nth-child(even) {
+    background-color: #ffffff; /* White for even rows */
+}
+
+/* Apply styles to the nested tables */
+#students-section .student-content table tbody > tr:nth-child(odd) {
+    background-color: #e6e6e6; /* Slightly darker gray for odd rows */
+}
+
+#students-section .student-content table tbody > tr:nth-child(even) {
+    background-color: #ffffff; /* White for even rows */
+}
+
+/*tbody tr:nth-child(odd) {*/
+/*    background-color: #f2f2f2; !* Light gray for odd rows *!*/
+/*}*/
+
+/*tbody tr:nth-child(even) {*/
+/*    background-color: #ffffff; !* White for even rows *!*/
+/*}*/
+
