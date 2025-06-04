@@ -85,7 +85,6 @@ class ReservationController extends Controller
             for($i = 0; $i <= $row->days; $i++){
                 if(date('Y-m-d', strtotime("+$i days", strtotime($row->date))) == $data['date'] && $row->room_id != $_POST['room_id']){
                     $_SESSION['warning_message'] = "ez a nap már le van foglalva";
-                    //bizonyíték hogy ez simák balázs munkája.
                     $this->redirect('/reservations');
                 }
             }
