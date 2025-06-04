@@ -3156,3 +3156,5 @@ Stack trace:
 #0 {main}
   thrown in C:\Users\simak_nud1nbw\OneDrive\Dokumentumok\Hotel_Oop\public\index.php on line 16
 [03-Jun-2025 15:51:40 Europe/Berlin] PHP Warning:  foreach() argument must be of type array|object, string given in C:\Users\simak_nud1nbw\OneDrive\Dokumentumok\Hotel_Oop\app\Models\Model.php on line 49
+[04-Jun-2025 13:23:11 Europe/Berlin] SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hotel.reservations' doesn't exist
+[04-Jun-2025 13:23:50 Europe/Berlin] SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hotel.reservations' doesn't exist

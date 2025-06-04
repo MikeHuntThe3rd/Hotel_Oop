@@ -35,13 +35,7 @@ class Display
         // Kiírjuk az üzenetet a megfelelő stílussal
         ob_start();
         echo "
-            <div style='position: relative; padding: 10px; margin: 10px 0; border-radius: 4px; $style $fontWeight'>
-                <button onclick='this.parentElement.style.display=\"none\";' 
-                        style='position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 16px; cursor: pointer;'>
-                    &times;
-                </button>
-                $message
-            </div>";
+        <div style='position: relative; padding: 10px; margin: 10px 0; border-radius: 4px; $style $fontWeight'>$message</div>";
         $output = ob_get_clean();
         echo $output;
     }
