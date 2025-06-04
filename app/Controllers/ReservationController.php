@@ -83,13 +83,13 @@ class ReservationController extends Controller
         $table_data = $this->model->all();
         foreach($table_data as $row){
             for($i = 0; $i <= $row->days; $i++){
-                if(date('Y-m-d', strtotime("+$i days", strtotime($row->date))) == $data['date'] && $row->room_id != $_POST['room_id']){
+                if(date('Y-m-d', strtotime("+$i days", strtotime($row->date))) == $data['date'] && $row->room_id != $_POST['room_id'] && $row->id != $id){
                     $_SESSION['warning_message'] = "ez a nap már le van foglalva";
                     $this->redirect('/reservations');
                 }
             }
             for($i = 0; $i <= $data['days']; $i++){
-                if(date('Y-m-d', strtotime("+$i days", strtotime($data['date']))) == $row->date && $row->room_id != $_POST['room_id']){
+                if(date('Y-m-d', strtotime("+$i days", strtotime($data['date']))) == $row->date && $row->room_id != $_POST['room_id'] && $row->id != $id){
                     $_SESSION['warning_message'] = "ez a nap már le van foglalva";
                     $this->redirect('/reservations');
                 }
